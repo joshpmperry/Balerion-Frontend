@@ -1,42 +1,123 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.email {
+  font-size: 32px;
+  font-weight: 600;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.memo-title-header {
+  font-weight: 700;
+  font-size: 64px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.memo-title-count {
+  font-weight: 500;
+  font-size: 32px;
 }
 
-.card {
-  padding: 2em;
+.email-logout {
+  padding-right: 30px;
 }
 
-.read-the-docs {
-  color: #888;
+.container {
+  justify-items: center;
+  min-width: 100vw;
+}
+
+.memo-header {
+  align-items: baseline;
+  margin-bottom: 76px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.grid-container {
+  gap: 18px
+}
+
+.cardx {
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  /* Following dimensions seen on both desktop and mobile view as they are fixed size */
+  width: 347px; 
+  height: 198px;
+  /* Following the distance between component found in the document */
+  justify-content: space-between;
+}
+
+.card-identity {
+  padding-top: 24px;
+  padding-left: 15px;
+}
+
+.card-title {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.card-role {
+  background-color: rgba(255, 108, 111, 1);
+  width: 61px;
+  height: 31px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 5px 10px;
+  margin-top: 11px
+}
+
+.card-input {
+  margin: 10px 13px;
+  width: 214px;
+  color: #000000;
+  padding: 10px;
+  background-color: rgba(212, 212, 216, 0.3);
+  border-radius: 10px;
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 20px;
+  flex: 1;
+}
+
+
+.login-page {
+  height: 100vh;
+  width: 100vw;
+}
+
+.login-header {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-bottom: 20px;
+  justify-self: start;
+}
+
+.login-label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.login-input {
+  background-color: #393937;
+  border-radius: 12px;
+  padding: 8px 6px;
+}
+
+.login-submit {
+  flex: 1;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  justify-content: center;
 }
