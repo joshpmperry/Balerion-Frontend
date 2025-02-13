@@ -79,20 +79,18 @@ npm install
 
 > Add the required MongoURI to .env following the .env.example
 
-Run Backend
+#### Run Backend
 
 > Runs using nodemon for hot reload
 
 ```bash
-npm run dev
+npm run backend
 ```
 
-Run Frontend
+#### Run Frontend
 
 ```bash
-cd ./frontend
-
-npm run dev
+npm run frontend
 ```
 
 This code is submitted as part of a take-home assignment for the application process at Balerion. It may not be used, modified, or redistributed without the express permission of the applicant.
