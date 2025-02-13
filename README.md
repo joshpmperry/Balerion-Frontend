@@ -79,6 +79,8 @@ npm install
 
 > Add the required MongoURI to .env following the .env.example
 
+`Retrieve a MongoURI by either creating a cluster and adding the URI in to .env or locally connect to your MongoDB on device`
+
 #### Run Backend
 
 > Runs using nodemon for hot reload
