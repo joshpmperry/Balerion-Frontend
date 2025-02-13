@@ -11,6 +11,23 @@
   justify-content: space-between;
 }
 
+.add-new-card {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  width: 347px; 
+  height: 198px;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-card-plus {
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #000000;
+}
+
 .card-identity {
   padding-top: 24px;
   padding-left: 15px;

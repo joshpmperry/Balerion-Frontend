@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-
+import {jwtDecode} from "jwt-decode";
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
@@ -18,7 +17,6 @@ export const useAuth = () => {
     try {
       const decoded = jwtDecode(token);
       setUser(decoded);
-      navigate("/"); 
     } catch (error) {
       console.error("Invalid token:", error);
       localStorage.removeItem("token");
@@ -26,5 +24,16 @@ export const useAuth = () => {
     }
   }, [navigate]);
 
-  return { user };
+  const login = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      localStorage.setItem("token", token);
+      setUser(decoded);
+      navigate("/");
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  };
+
+  return { user, login };
 };

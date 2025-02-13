@@ -1,49 +1,75 @@
-import { LogOut} from 'lucide-react'
-
-
-import '../src/App.css'
-import Card from '../components/cards/card'
-import { getMemoCard } from '../utils/memo.utils'
-import { jwtDecode } from 'jwt-decode';
+import { LogOut } from 'lucide-react';
+import { getMemoCard } from '../utils/memo.utils';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
+import Card from '../components/cards/card';
+
+import '../src/App.css';
 
 function HomePage() {
   const [cards, setCards] = useState([]);
-  const token = localStorage.getItem('token');
-  const jwt = token ? jwtDecode(token) : { role: 'ADMIN', email: 'joshpmperry@gmail.com' };
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const fetchCards = async () => {
+    if (!user) return;
+    const fetchedCards = await getMemoCard(user.role);
+    setCards(fetchedCards);
+  };
 
   useEffect(() => {
-    getMemoCard().then((fetchedCards) => {
-      setCards(fetchedCards);
-      console.log(fetchedCards);
-    });
-  }, []);
+    if (user) {
+      fetchCards();
+    }
+  }, [user]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/auth/login');
+  };
+
+  let adminIndex = 1;
+  let userIndex = 1;
 
   return (
     <>
-      <div className='flex p-4 top-bar' >
-        <div className='spacer'/>
+      <div className='flex p-4 top-bar'>
+        <div className='spacer' />
         <div className='flex email-logout'>
-          <h1 className='pr-4 email'>Balerion.josh.perry@gmail.com </h1>
-          <button onClick={() => {console.log("logout")} }>
-              <LogOut size='32'/>
+          <h1 className='pr-4 email'>{user?.email}</h1>
+          <button onClick={handleLogout}>
+            <LogOut size='32' />
           </button>
         </div>
       </div>
       <div className='container'>
         <div className='flex memo-header'>
-          <h1 className='memo-title-header'> Memo Cards </h1><p className='memo-title-count'>({cards.length})</p>
+          <h1 className='memo-title-header'>Memo Cards</h1>
+          <p className='memo-title-count'>({cards.length})</p>
         </div>
         {/* cards */}
         <div className='grid grid-cols-3 auto-rows-auto gap-[18px]'>
-          {cards.map((card) => (
-            <Card key={card.ID || cards.indexOf(card)} data={card} />
-          ))}
+          {cards.map((card) => {
+            const index = card.role === 'ADMIN' ? adminIndex++ : userIndex++;
+            return <Card 
+              key={card._id} 
+              data={card}
+              onRefresh={fetchCards}
+              cardIndex={index}
+            />
+          })}
+          <Card 
+            data={{ 'bodyText': '', 'role': user?.role}} 
+            isNewCard={true} 
+            onRefresh={fetchCards}
+            cardIndex={user?.role === 'ADMIN' ? adminIndex : userIndex}
+          />
         </div>
-      </div>   
+      </div>
     </>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

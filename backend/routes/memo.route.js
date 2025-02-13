@@ -3,13 +3,14 @@ import MemoCard from "../models/memo.model.js";
 
 const memoRouter = Router();
 
-memoRouter.get("/", async (req, res) => {
+memoRouter.get("/:role", async (req, res) => {
   try {
-    // do real check from user jwt
-    const isAdmin = true; 
+    const role = req.params.role;
+    const isAdmin = role === "ADMIN";
 
     // Sort based on role
-    const memoCards = await MemoCard.find().sort({ createdAt: isAdmin ? -1 : 1 });
+    const query = role === "ADMIN" ? {} : { role: "USER" };
+    const memoCards = await MemoCard.find(query).sort({ createdAt: isAdmin ? -1 : 1 });
 
     res.status(200).json({ success: true, data: memoCards });
   } catch (error) {

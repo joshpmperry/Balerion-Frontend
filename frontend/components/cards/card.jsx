@@ -1,54 +1,88 @@
-import { useState, useEffect } from "react"; // Import useEffect
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Badge from "../badge/badge";
 
 import './card.css'
 
-function Card({ data }) {
+function Card({ data, isNewCard, onRefresh, cardIndex }) {
+
+  console.log('Card data:', data); 
+  console.log('Card index:', cardIndex);
+
   Card.propTypes = {
     data: PropTypes.shape({
       role: PropTypes.string.isRequired,
       bodyText: PropTypes.string,
     }).isRequired,
+    isNewCard: PropTypes.bool,
+    onRefresh: PropTypes.func,
+    cardIndex: PropTypes.number,
   };
-
-  const user = {email: "josh@gmail.com", role: 'ADMIN'}
 
   if (!data) return null;
 
   const [text, setText] = useState(data.bodyText || "");
   const [saved, setSaved] = useState(false);
-  const [initialData, setInitialData] = useState(!!data.bodyText); // New state
+  const [isEdit, setIsEdit] = useState(false);
+  const [initialData, setInitialData] = useState(!!data.bodyText);
 
   useEffect(() => {
-      setText(data.bodyText || "");
-      setInitialData(!!data.bodyText)
-  }, [data])
-
+    if (isNewCard) {
+      // Reset states for new card
+      setSaved(false);
+      setInitialData(false);
+      setText("");
+    }
+  }, [isNewCard, saved]);
 
   const handleSave = async () => {
     try {
-      await fetch("http://localhost:5050/create", {
+      await fetch("api/memo/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role: user.role, bodyText: text }),
+        body: JSON.stringify({ role: data.role, bodyText: text }),
       });
-      setSaved(true);
-      setInitialData(true); 
+      
+      if (isNewCard) {
+        // Reset states before refreshing
+        setSaved(false);
+        setInitialData(false);
+        setText("");
+        setIsEdit(false);
+      } else {
+        setSaved(true);
+        setInitialData(true);
+      }
+      await onRefresh();
     } catch (error) {
       console.error("Error saving memo:", error);
     }
   };
 
+  const cardName = () => {
+    return data.role === "ADMIN" ? "ADMIN" : "MEMO";
+  };
+
+  if (isNewCard && !isEdit) {
+    return (
+      <>
+        <div className='add-new-card' onClick={() => setIsEdit(true)}>
+          <div className='grid'>
+            <h1 className="add-card-plus">+</h1>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
-      <div className='cardx' key={data}>
+      <div className='cardx'   key={data}>
         <div className='card-identity grid'>
           <div>
-            <h2 className='card-title'> {data.role}- </h2>
+            <h2 className='card-title'> {cardName()}-{cardIndex} </h2>
             <Badge data={data.role} />
           </div>
           <div className='spacers' />
