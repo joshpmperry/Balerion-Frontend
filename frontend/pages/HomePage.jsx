@@ -30,8 +30,10 @@ function HomePage() {
     navigate('/auth/login');
   };
 
-  let adminIndex = 1;
+  const adminCards = cards.filter(card => card.role === 'ADMIN');
+
   let userIndex = 1;
+  let adminIndex = adminCards.length;
 
   return (
     <>
@@ -52,7 +54,7 @@ function HomePage() {
         {/* cards */}
         <div className='grid grid-cols-3 auto-rows-auto gap-[18px]'>
           {cards.map((card) => {
-            const index = card.role === 'ADMIN' ? adminIndex++ : userIndex++;
+            const index = card.role === 'ADMIN' ? adminIndex-- : userIndex++;
             return <Card 
               key={card._id} 
               data={card}
@@ -64,7 +66,7 @@ function HomePage() {
             data={{ 'bodyText': '', 'role': user?.role}} 
             isNewCard={true} 
             onRefresh={fetchCards}
-            cardIndex={user?.role === 'ADMIN' ? adminIndex : userIndex}
+            cardIndex={user?.role === 'ADMIN' ? adminCards.length+1 : userIndex}
           />
         </div>
       </div>

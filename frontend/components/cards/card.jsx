@@ -5,10 +5,6 @@ import Badge from "../badge/badge";
 import './card.css'
 
 function Card({ data, isNewCard, onRefresh, cardIndex }) {
-
-  console.log('Card data:', data); 
-  console.log('Card index:', cardIndex);
-
   Card.propTypes = {
     data: PropTypes.shape({
       role: PropTypes.string.isRequired,
