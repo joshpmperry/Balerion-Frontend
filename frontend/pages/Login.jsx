@@ -1,13 +1,35 @@
 import { useState } from 'react';
 import '../src/App.css'
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Username:', username, 'Password:', password);
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          { name, password }
+        ),
+      });
+
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -15,7 +37,7 @@ const LoginPage = () => {
       <div className="p-8 w-96">
         <h2 className="login-header text-white text-center">เข้าสู่ระบบ</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="grid" style={{marginBottom: '20px'}}>
             <label htmlFor="username" className="block login-label mb-2">บัญชีพนักงาน</label>
             <input
@@ -23,8 +45,9 @@ const LoginPage = () => {
               id="username"
               className="w-full login-input  text-white focus:outline-none hover:bg-[#0000000D]"
               placeholder="A0001"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
             />
           </div>
           <div className="mb-6">
@@ -36,12 +59,13 @@ const LoginPage = () => {
               placeholder="-------"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <div className="flex login-submit">
+          <div className="flex">
             <button
               type="submit"
-              className=" text-black font-bold py-2 px-4 rounded-md focus:outline-none"
+              className="login-submit text-black font-bold py-2 px-4 rounded-md focus:outline-none"
             >
               ค้นหา 
             </button>

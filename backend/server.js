@@ -1,16 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 
 import { connectDB } from "./config/db.js";
 
 import memoRouter from "./routes/memo.route.js";
 import authRouter from "./routes/auth.route.js";
+import userRouter from "./routes/user.route.js";
 
 // .env
 dotenv.config();
-
-const frontend_url = process.env.FROTEND_URL;
 
 // Initialize express
 const app = express();
@@ -18,22 +16,10 @@ const app = express();
 // allows to accept json data in req.body
 app.use(express.json());
 
-// Security to prevent unauthorized access to backend (only allow frontend)
-app.use(cors({
-  origin: frontend_url,
-  methods: [
-    "GET",
-    "POST",
-    // TODO: make sure to check if these are needed or not
-    // "PUT",
-    // "DELETE"
-  ],
-  credentials: true
-}));
-
 // Routes 
-app.use('/memo', memoRouter);
-app.use('/auth', authRouter);
+app.use('/api/memo', memoRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 
 // Invalid Routes
 app.use((req, res) => {

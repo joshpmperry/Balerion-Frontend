@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"; // Import useEffect
 import PropTypes from "prop-types";
 import Badge from "../badge/badge";
+
 import './card.css'
 
 function Card({ data }) {
@@ -47,7 +48,7 @@ function Card({ data }) {
       <div className='cardx' key={data}>
         <div className='card-identity grid'>
           <div>
-            <h2 className='card-title'> {data.role}-N </h2>
+            <h2 className='card-title'> {data.role}- </h2>
             <Badge data={data.role} />
           </div>
           <div className='spacers' />

@@ -3,40 +3,22 @@ import { LogOut} from 'lucide-react'
 
 import '../src/App.css'
 import Card from '../components/cards/card'
+import { getMemoCard } from '../utils/memo.utils'
+import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
+
 
 function HomePage() {
+  const [cards, setCards] = useState([]);
+  const token = localStorage.getItem('token');
+  const jwt = token ? jwtDecode(token) : { role: 'ADMIN', email: 'joshpmperry@gmail.com' };
 
-  const cards = [
-    {
-      role: 'ADMIN',
-      bodyText: 'hello worlds'
-    },
-    {
-      role: 'USER',
-      bodyText: 'Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum'
-    },
-    {
-      role: 'USER',
-      bodyText: 'Lorem Ipsum'
-    },
-    {
-      role: 'USER',
-      bodyText: 'Lorem Ipsum'
-    }
-    ,
-    {
-      role: 'ADMIN',
-      bodyText: 'Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum'
-    },
-  ]
-
-  const bodyText = ''
-  const test = {
-    role: 'USER',
-    bodyText: bodyText,
-  }
-
-
+  useEffect(() => {
+    getMemoCard().then((fetchedCards) => {
+      setCards(fetchedCards);
+      console.log(fetchedCards);
+    });
+  }, []);
 
   return (
     <>
@@ -56,9 +38,8 @@ function HomePage() {
         {/* cards */}
         <div className='grid grid-cols-3 auto-rows-auto gap-[18px]'>
           {cards.map((card) => (
-            <Card key="" data={card} />
+            <Card key={card.ID || cards.indexOf(card)} data={card} />
           ))}
-          <Card key="" data={test} />
         </div>
       </div>   
     </>

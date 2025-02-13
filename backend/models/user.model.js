@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt'
 
 const userSchema = new mongoose.Schema({
   name: { 
@@ -7,7 +8,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    required: false,
   },
   password: {
     type: String, // Hashed password for security
@@ -16,11 +17,29 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["USER", "ADMIN"],
-    required: true
+    required: false,
   }
 });
 
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  try {
+    return await bcrypt.compare(candidatePassword, this.password);
+  } catch (err) {
+    return false;
+  }
+};
 
 const User = mongoose.model("User", userSchema);
 

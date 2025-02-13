@@ -11,4 +11,13 @@ export default defineConfig({
   optimizeDeps: {
     include: ["lucide-react"],
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
 })
